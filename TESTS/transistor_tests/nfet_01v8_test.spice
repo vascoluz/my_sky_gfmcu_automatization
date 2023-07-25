@@ -1,0 +1,36 @@
+** sch_path: /home/vasco/Desktop/sky130A/TESTS/transistor_tests/nfet_01v8_test.sch
+**.subckt nfet_01v8_test
+XM2 net1 VG GND GND sky130_fd_pr__nfet_01v8 L=l1 W=w1 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+VDD VDD GND VDD
+.save i(vdd)
+V_gate VG GND 0
+.save i(v_gate)
+V1 VDD net1 0
+.save i(v1)
+**** begin user architecture code
+
+** opencircuitdesign pdks install
+.lib /home/vasco/Desktop/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice tt
+
+.param VDD = 1.8
+.param w1 = 101.0
+.param l1 = 1.5
+.TEMP 100
+
+
+.control
+  save all
+  dc V_gate 0 1.8 0.0001
+  plot i(V1)
+  wrdata /home/vasco/Desktop/sky130A/TESTS/transistor_tests/nfet_01v8_dc_vgs.txt i(V1)
+
+
+.endc
+
+
+**** end user architecture code
+**.ends
+.GLOBAL GND
+.end
